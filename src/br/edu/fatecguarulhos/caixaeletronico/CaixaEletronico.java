@@ -21,7 +21,7 @@ public class CaixaEletronico implements ICaixaEletronico{
 	    return resposta;
 	}
 		public String pegaValorTotalDisponivel() {
-		String resposta = "";
+		String resposta = ("Valor total disponivel : R$"+totalDisponivel+",00");
 		//logica de pega o valor total disponivel no caixa eletronio
 		return resposta;
 		}
