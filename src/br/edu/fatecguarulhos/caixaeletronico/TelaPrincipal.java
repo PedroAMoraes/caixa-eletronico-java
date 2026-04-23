@@ -5,21 +5,32 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+
+import javax.swing.Icon;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TelaPrincipal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-
+	private CaixaEletronico caixaEletronico;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -36,6 +47,7 @@ public class TelaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaPrincipal() {
+		caixaEletronico = new CaixaEletronico();
 		setTitle("Caixa Eletronico");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 370, 563);
@@ -50,6 +62,12 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(lblMCliente);
 		
 		JButton btnEfeSaque = new JButton("Efetuar Saque");
+		btnEfeSaque.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mostrarPainelSaque();
+			}
+		});
+		
 		btnEfeSaque.setBackground(new Color(201, 231, 227));
 		btnEfeSaque.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnEfeSaque.setBounds(20, 69, 324, 34);
@@ -95,5 +113,24 @@ public class TelaPrincipal extends JFrame {
 		btnSair.setBounds(10, 455, 324, 34);
 		contentPane.add(btnSair);
 
+	}
+	private void mostrarPainelSaque() {
+		IconFontSwing.register(FontAwesome.getIconFont());
+		Icon icon = IconFontSwing.buildIcon(FontAwesome.MONEY, 30);
+		String valor = (String) JOptionPane.showInputDialog(this,"Digite o valor que deseja sacar:","Saque",JOptionPane.INFORMATION_MESSAGE,icon, null, "");
+		try {
+			Integer valorConvertido = Integer.parseInt(valor);
+			sacarValor(valorConvertido);
+		}
+		catch (NumberFormatException nfe) {
+			JOptionPane.showMessageDialog(this, "Valor inserido não é um número inteiro ou é um valor muito alto", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		
+	}
+	private void sacarValor(Integer valor) {
+		JOptionPane.showMessageDialog(this,caixaEletronico.sacar(valor),"Seu dinheiro:", JOptionPane.PLAIN_MESSAGE);
 	}
 }

@@ -60,42 +60,50 @@ public class CaixaEletronico implements ICaixaEletronico{
 			int[][] cedulasSacadas = {{100,0},{50,0},{20,0},{10,0}, {5,0},{2,0}};
 			int numeroDeCedulasEmitidas = 0;
 			String resposta = "";
-			System.out.println("Valor a sacar: R$" + valor);
-			for(int indiceCedula = 0; indiceCedula < cedulas.length; indiceCedula++) {
+			for(int i = 0; i < cedulas.length; i++) {
 				//Recalcular notas se o valor não puder ser sacado com as maiores notas
+				
+				cedulasSacadas[i][1] = calcularQuantidadeCedulas(valorRestante, cedulas[i][0]);
+				
+				boolean naoHaCedulasSuficientes = cedulasSacadas[i][1] > cedulas[i][1];
+				//Cédulas necessárias serão as que restaram no caixa.
+				if(naoHaCedulasSuficientes) 
+					cedulasSacadas[i][1] = cedulas[i][1];
+				
+				int valorSacado = cedulasSacadas[i][0] * cedulasSacadas[i][1];
+				valorRestante -= valorSacado;
+				numeroDeCedulasEmitidas +=  cedulasSacadas[i][1];
 				if(valorRestante == 1 || valorRestante == 3) {
-					cedulasSacadas[indiceCedula-1][1]--; 
-					valorRestante += cedulas[indiceCedula-1][0];
-					cedulas[indiceCedula-1][1]++;
+					cedulasSacadas[i][1]--; 
+					valorRestante += cedulas[i][0];
 					numeroDeCedulasEmitidas--;
 				}
-				cedulasSacadas[indiceCedula][1] = calcularQuantidadeCedulas(valorRestante, cedulas[indiceCedula][0]);
-				
-				boolean naoHaCedulasSuficientes = cedulasSacadas[indiceCedula][1] > cedulas[indiceCedula][1];
-				if(naoHaCedulasSuficientes) 
-					cedulasSacadas[indiceCedula][1] = cedulas[indiceCedula][1];
-				
-				int valorSacado = cedulasSacadas[indiceCedula][0] * cedulasSacadas[indiceCedula][1];
-				valorRestante -= valorSacado;
-				
-				numeroDeCedulasEmitidas +=  cedulasSacadas[indiceCedula][1];
-				//Remover cédulas do caixa
-				cedulas[indiceCedula][1] -= cedulasSacadas[indiceCedula][1];
 			}
-			if(valorRestante != 0) throw new RuntimeException("Valor excedente de R$" + valorRestante);
+			if(valorRestante != 0) throw new RuntimeException("Não há notas suficientes para sacar este valor.");
 			//Implementar exceção por falta de cédulas.
 			if(numeroDeCedulasEmitidas > 30) {
 				throw new RuntimeException("Não é possível sacar mais de 30 cédulas");
 			}
-			
+			removerCedulas(cedulasSacadas);
 			for(int nota[] : cedulasSacadas) {
+				String substantivo = nota[1] == 1 ? " nota" : " notas";
 				if(nota[1] != 0)
-				resposta = resposta.concat(nota[1] + " notas de "+ nota[0] + "\n");
+				resposta = resposta.concat(nota[1] + substantivo+" de R$"+ nota[0] + "\n");
 			}
 			return resposta;
 		}
 		private int calcularQuantidadeCedulas(int valorRestante, int valorCedula) {
 			return (valorRestante - (valorRestante % valorCedula)) / valorCedula;
+		}
+		private void devolverCedulas(int cedulas[][]) {
+			for(int i = 0; i < cedulas.length; i++) {
+				this.cedulas[i][1] += cedulas[i][1];
+			}
+		}
+		private void removerCedulas(int cedulas[][]) {
+			for(int i = 0; i < cedulas.length; i++) {
+				this.cedulas[i][1] -= cedulas[i][1];
+			}
 		}
 		public String armazenaCotaMinima(Integer minimo) {
             cotaMinima = minimo;
