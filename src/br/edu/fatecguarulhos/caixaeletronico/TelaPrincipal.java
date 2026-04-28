@@ -10,6 +10,8 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -30,7 +32,15 @@ public class TelaPrincipal extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		
+		/*
+        try {
+            // Set the Look and Feel to the system's native one
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | 
+                 IllegalAccessException | UnsupportedLookAndFeelException e) {
+            // Log or handle the exception if the theme cannot be loaded
+            e.printStackTrace();
+        }*/
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
