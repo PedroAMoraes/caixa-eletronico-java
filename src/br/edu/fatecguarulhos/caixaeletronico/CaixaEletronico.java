@@ -121,7 +121,7 @@ public class CaixaEletronico implements ICaixaEletronico{
         public void verificarCotaMinima() {
             atualizarTotalDisponivel();
             if(cotaMinima > totalDisponivel)
-                throw new RuntimeException("Caixa vazio: Chame o operador");
+                throw new RuntimeException("Caixa vazio: Chame o operador.");
         }
 
         private void atualizarTotalDisponivel() {
