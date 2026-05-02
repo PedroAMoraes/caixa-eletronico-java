@@ -143,15 +143,18 @@ public class TelaPrincipal extends JFrame {
 	}
 	
 	private void mostrarPainelSaque() {
-		IconFontSwing.register(FontAwesome.getIconFont());
-		Icon icon = IconFontSwing.buildIcon(FontAwesome.MONEY, 30);
-		String valor = (String) JOptionPane.showInputDialog(this,"Digite o valor que deseja sacar:","Saque",JOptionPane.INFORMATION_MESSAGE,icon, null, "");
 		try {
+			IconFontSwing.register(FontAwesome.getIconFont());
+			Icon icon = IconFontSwing.buildIcon(FontAwesome.MONEY, 30);
+			String valor = (String) JOptionPane.showInputDialog(this,"Digite o valor que deseja sacar:","Saque",JOptionPane.INFORMATION_MESSAGE,icon, null, "");
 			Integer valorConvertido = Integer.parseInt(valor);
 			sacarValor(valorConvertido);
 		}
 		catch (NumberFormatException nfe) {
 			JOptionPane.showMessageDialog(this, "Valor inserido não é um número inteiro ou é um valor muito alto", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		catch (RuntimeException re) {
+			JOptionPane.showMessageDialog(this, re.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
